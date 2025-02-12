@@ -1,0 +1,4 @@
+2025-02-11T22:38:02.300592Z 0 [Warning] [MY-010097] [Server] Insecure configuration for --secure-file-priv: Current value does not restrict location of generated files. Consider setting it to a valid, non-empty path.
+2025-02-11T22:38:02.300707Z 0 [Warning] [MY-010918] [Server] 'default_authentication_plugin' is deprecated and will be removed in a future release. Please use authentication_policy instead.
+2025-02-11T22:38:02.300773Z 0 [System] [MY-010116] [Server] C:\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld (mysqld 8.0.30) starting as process 13108
+2025-02-11T22:38:02.364950Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
