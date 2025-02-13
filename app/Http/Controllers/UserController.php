@@ -47,29 +47,32 @@ public function register(Request $request){
     
      //login
 
-public function login(Request $request)
-{
-    $request -> validate([
-    'email' => 'required|string|email|max:255|exists:users,email',
-    'password' => 'required|string|min:6',
-    ]);
-    if(Auth::attempt($request->only('email','password')));
-    return Response()->json([
-       'message' => 'invalid email or password'
-    ],
-      401 
-);
-$user=  User::where('email',$request->email)->FirstOrFail(); 
-$token = $user->createToken('authToken')->plainTextToken;
-return response()->json([
-    'message' => 'login successful',
-    'user' => $user,
-    'token' => $token,
-], 201);
-    }
 
    
     
+public function login(Request $request)
+{
+        $request->validate([
+            'email' => 'required|string|email|max:255|exists:users,email',
+            'password' => 'required|string|min:6',
+        ]);
+        
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json([
+                'message' => 'Invalid email or password'
+            ], 401);
+        }
+
+        $user = Auth::user();
+        $token = $user->createToken('authToken')->plainTextToken;
+        return response()->json([
+            'message' => 'Login successful',
+            'user' => $user,
+            'token' => $token,
+        ], 200);
+}
+
+
    
 
 // logout
