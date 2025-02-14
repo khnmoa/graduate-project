@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-
+use App\Http\Middleware\AdminMiddleware;
 
 
 Route::get('/user', function (Request $request) {
@@ -22,3 +22,11 @@ Route::get('/test', function (Request $request) {
         'message' => 'تم الاتصال بنجاح!',
         'status' => true
     ]);});
+
+//admin
+    // Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    //     Route::get('/users', [UserController::class, 'index']);
+    // });
+  
+    
+   

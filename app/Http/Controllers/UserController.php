@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 
 {
-   // إضافة مستخدم جديد  
+   // إضافة مستخدم جديد  register
 public function register(Request $request){
     $request -> validate([
         'name' => 'required|string|max:255',
@@ -17,6 +17,7 @@ public function register(Request $request){
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'role' => 'nullable|string',
             'nationality' => 'nullable|string',
+            'mission' => 'nullable|string', //  إضافة التحقق من المهمة
     ]);
       // تخزين الصورة إن كانت موجودة
       $imagePath = null;
@@ -31,6 +32,7 @@ public function register(Request $request){
         'image' => $imagePath, // تخزين مسار الصورة
         'role' => $request->role ?? 'user', // إذا لم يتم تقديم الدور، سيتم تعيينه كـ 'user'
         'nationality' => $request->nationality, // إذا لم يتم تقديم الجنسية، سيتم تعيينها كـ null
+        'mission' => $request->mission, //  تخزين المهمة
     ]);
  // إنشاء توكن للمستخدم
  $token = $user->createToken('authToken')->plainTextToken;
@@ -46,9 +48,6 @@ public function register(Request $request){
  
     
      //login
-
-
-   
     
 public function login(Request $request)
 {
@@ -63,17 +62,17 @@ public function login(Request $request)
             ], 401);
         }
 
-        $user = Auth::user();
+        $user = Auth::user();// تحديث آخر تسجيل دخول
+        $user->update(['last_login_at' => now()]);
         $token = $user->createToken('authToken')->plainTextToken;
         return response()->json([
             'message' => 'Login successful',
             'user' => $user,
             'token' => $token,
-        ], 200);
+        ]);
 }
 
 
-   
 
 // logout
 public function logout(Request $request){

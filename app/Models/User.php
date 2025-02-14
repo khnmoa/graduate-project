@@ -28,6 +28,8 @@ class User extends Authenticatable
             'image', // إضافة الحقل الخاص بالصورة
             'role',  // إضافة الحقل الخاص بالدور
             'nationality', // إضافة الحقل الخاص بالجنسية
+            'mission',
+            'last_login_at'
         ];
         
     
@@ -54,4 +56,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+// public function isAdmin()
+// {
+//     return $this->role === 'admin';
+// }
 }
