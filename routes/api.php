@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\AdminController;
-
+use Illuminate\Support\Facades\DB;
 
 
 Route::get('/user', function (Request $request) {
@@ -25,8 +25,4 @@ Route::get('/test', function (Request $request) {
         'status' => true
     ]);});
 
-// ** حماية مسارات الأدمن **
-// Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
-//     Route::get('/admin/users', [AdminController::class, 'listUsers']);
-//     Route::post('/admin/users/{id}', [AdminController::class, 'updateUser']);
-// });
+ 
