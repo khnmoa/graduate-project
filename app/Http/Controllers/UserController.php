@@ -5,6 +5,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
 
+
 class UserController extends Controller
 
 {
@@ -70,6 +71,7 @@ public function login(Request $request)
             'user' => $user,
             'token' => $token,
         ]);
+        
 }
 
 
@@ -97,7 +99,6 @@ public function showProfile(Request $request)
 
 
 
-   
 
      
   
