@@ -2,16 +2,13 @@
 
 
 namespace App\Http\Controllers;
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
 class ProgrationController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:sanctum');
-    }
-
+    
     public function index()
     {
         return response()->json([
@@ -20,3 +17,14 @@ class ProgrationController extends Controller
         ]);
     }
 }
+
+
+
+
+
+
+ 
+
+
+
+   

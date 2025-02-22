@@ -6,17 +6,10 @@ use Illuminate\Http\Request;
 
 class TelemetryController extends Controller
 {
-    //
-
-    public function __construct()
-    {
-        $this->middleware('auth:sanctum');
-    }
-
     public function index()
     {
         return response()->json([
-            'message' => 'telementry API is working!',
+            'message' => 'Telemetry API is working!',
             'status' => true
         ]);
     }
