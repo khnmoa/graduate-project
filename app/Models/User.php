@@ -8,12 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-
-
-
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
 
     /**
@@ -21,19 +17,16 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    
-        protected $fillable = [
-            'name',
-            'email',
-            'password',
-            'image', // إضافة الحقل الخاص بالصورة
-            'role',  // إضافة الحقل الخاص بالدور
-            'nationality', // إضافة الحقل الخاص بالجنسية
-            'mission',
-            'last_login_at'
-        ];
-        
-    
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'image', // إضافة الحقل الخاص بالصورة
+        'role',  // إضافة الحقل الخاص بالدور
+        'nationality', // إضافة الحقل الخاص بالجنسية
+        'mission',
+        'last_login_at'
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -57,9 +50,4 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
-// public function isAdmin()
-// {
-//     return $this->role === 'admin';
-// }
 }

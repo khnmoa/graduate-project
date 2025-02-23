@@ -18,15 +18,11 @@ $app = Application::configure(basePath: dirname(__DIR__)) // حفظ التطبي
 
         $middleware->alias([
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
+            'admin' => \App\Http\Middleware\AdminMiddleware::class, // تم التصحيح هنا
         ]);
-
-        // $middleware->append(\App\Http\Middleware\AdminMiddleware::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
-
-// إضافة Middleware بعد إنشاء التطبيق
-$app->router->aliasMiddleware('mission.access', \App\Http\Middleware\CheckMissionAccess::class);
 
 return $app; // تأكد من إعادة التطبيق
