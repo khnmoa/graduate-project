@@ -21,18 +21,3 @@ class AdminMiddleware
 }
 
 
-
-
-
-// class AdminMiddleware
-// {
-//     public function handle(Request $request, Closure $next): Response
-//     {
-//         // \Log::info('User Role:', ['users' => auth()->user()]);
-//         if (!$request->user() || $request->user()->role !== 'admin') {
-//             return response()->json(['message' => 'Unauthorized'], 403);
-//         }
-        
-//         return $next($request);
-//     }
-// }

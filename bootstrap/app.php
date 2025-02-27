@@ -19,10 +19,13 @@ $app = Application::configure(basePath: dirname(__DIR__)) // حفظ التطبي
         $middleware->alias([
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
             'admin' => \App\Http\Middleware\AdminMiddleware::class, // تم التصحيح هنا
-        ]);
+       'mission.access' => \App\Http\Middleware\CheckMissionAccess::class, // ✅ أضيفي ميدل وير المهمة هنا 
+     ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
 
-return $app; // تأكد من إعادة التطبيق
+
+
+return $app;

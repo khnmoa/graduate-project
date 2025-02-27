@@ -10,6 +10,7 @@ use App\Http\Controllers\ProgrationController;
 use App\Http\Controllers\ControlController;
 use App\Http\Controllers\TelemetryController;
 use App\Http\Controllers\PayloadController;
+use App\Http\Controllers\TaskController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,8 +84,11 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
-// Route::middleware('auth:sanctum')->get('/users', function (Request $request) {
-//     return response()->json($request->user());
-// });
-// Route::middleware(['auth:sanctum','admin'])->get('/users',[UserController::class, 'index']);
 
+
+// Route::apiResource('tasks', TaskController::class);
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    Route::post('/tasks', [TaskController::class, 'store']); // الأدمن فقط يمكنه تعيين المهام
+    Route::put('/tasks/{user}', [TaskController::class, 'update']);
+    Route::delete('/tasks/{user}', [TaskController::class, 'destroy']);
+});
