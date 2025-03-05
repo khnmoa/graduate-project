@@ -12,6 +12,7 @@ use App\Http\Controllers\TelemetryController;
 use App\Http\Controllers\PayloadController;
 use App\Http\Controllers\TaskController;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -31,7 +32,7 @@ Route::get('/test', function (Request $request) {
 
 // تسجيل الدخول والتسجيل
 Route::post('register', [UserController::class, 'register']);
-// Route::post('login', [UserController::class, 'login']);
+
 Route::post('login', [UserController::class, 'login'])->name('login');
 
 
@@ -46,8 +47,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
+// حماية كل API بناءً على المهمة المسجلة في قاعدة البيانات
+// Route::middleware(['auth:sanctum', 'mission.access:Progration'])->group(function () {
+// 
+
 
 Route::middleware(['auth:sanctum', CheckMissionAccess::class . ':Progration'])->group(function () {
+
     Route::get('/progration', [ProgrationController::class, 'index']);
 });
 
@@ -93,23 +99,37 @@ Route::middleware(['auth:sanctum', CheckMissionAccess::class . ':Payload'])->gro
 // حماية المسارات بمصادقة Sanctum
 Route::middleware('auth:sanctum')->group(function () {
     //  حماية المسارات للأدمن فقط
-    Route::middleware(AdminMiddleware::class)->group(function () {
+    Route::middleware('auth:sanctum', AdminMiddleware::class)->group(function () {
         Route::get('/users', [UserController::class, 'index']);  
         Route::post('/users', [UserController::class, 'store']); 
         Route::put('/users/{user}', [UserController::class, 'update']);
         Route::delete('/users/{user}', [UserController::class, 'destroy']);
     });
-
+   
+    
     // يمكن لأي مستخدم البحث عن المستخدمين
     Route::get('/users/search', [UserController::class, 'search']);
 });
 
 
+ 
+// // Route::apiResource('tasks', TaskController::class);
+// Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+//     Route::post('/tasks', [TaskController::class, 'store']); // الأدمن فقط يمكنه تعيين المهام
+//     Route::put('/tasks/{user}', [TaskController::class, 'update']);
+//     Route::delete('/tasks/{user}', [TaskController::class, 'destroy']);
+// });
 
-
-// Route::apiResource('tasks', TaskController::class);
-Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+// حماية مهام الأدمن فقط
+Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     Route::post('/tasks', [TaskController::class, 'store']); // الأدمن فقط يمكنه تعيين المهام
-    Route::put('/tasks/{user}', [TaskController::class, 'update']);
-    Route::delete('/tasks/{user}', [TaskController::class, 'destroy']);
+    Route::put('/tasks/{task}', [TaskController::class, 'update']);
+    Route::delete('/tasks/{task}', [TaskController::class, 'destroy']);
+});
+
+
+// 🔹 حماية البحث عن المهام بالتاريخ
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/tasks/by-date', [TaskController::class, 'getTasksByDate']);
 });
