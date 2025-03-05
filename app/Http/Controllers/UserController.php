@@ -13,10 +13,6 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        // تأمين جميع الطلبات بالمصادقة ما عدا التسجيل وتسجيل الدخول
-        // $this->middleware('auth:sanctum')->except(['register', 'login']);
-        // حماية مسارات الأدمن
-        // $this->middleware(\App\Http\Middleware\AdminMiddleware::class)->only(['index', 'store', 'update', 'destroy']);
     }
 
     // إضافة مستخدم جديد (التسجيل)
@@ -108,16 +104,72 @@ class UserController extends Controller
     }
 
     // جلب جميع المستخدمين (للأدمن فقط)
-    public function index()
+    // public function index()
+    // {
+    //     if (!Gate::allows('manage-users')) {
+    //         return response()->json(['message' => 'غير مصرح لك'], 403);
+    //     }
+
+    //     return response()->json(User::all());
+    // }
+
+   
+
+
+    // public function index(Request $request)
+    // {
+    //     // جلب الاسم من البارامتر (إذا وُجد)
+    //     $search = $request->query('name');
+    
+    //     // استعلام المستخدمين مع المهام المرتبطة
+    //     $query = User::with('tasks');
+    
+    //     // البحث بالاسم إذا تم تمريره في الطلب
+    //     if ($search) {
+    //         $query->where('name', 'LIKE', "%{$search}%");
+    //     }
+    
+    //     // جلب جميع المستخدمين مع المهام الخاصة بهم
+    //     // $users = $query->get();
+    //     $users = User::with('tasks')->get();
+    //     return response()->json([
+    //         'status' => true,
+    //         'users' => $users
+    //     ]);
+    // }
+    
+    public function index(Request $request)
     {
-        if (!Gate::allows('manage-users')) {
-            return response()->json(['message' => 'غير مصرح لك'], 403);
+        // جلب الاسم والتاريخ من الطلب
+        $search = $request->query('name');
+        $date = $request->query('date'); // مثلاً 2024-03-04
+    
+        // استعلام المستخدمين مع المهام المرتبطة
+        $query = User::with('tasks');
+    
+        // البحث بالاسم إذا تم تمريره في الطلب
+        if ($search) {
+            $query->where('name', 'LIKE', "%{$search}%");
         }
-
-        return response()->json(User::all());
+    
+        // البحث بالتاريخ إذا تم تمريره في الطلب
+        if ($date) {
+            $query->whereDate('created_at', $date);
+        }
+    
+        // جلب المستخدمين بعد الفلترة
+        $users = $query->get();
+    
+        return response()->json([
+            'status' => true,
+            'users' => $users
+        ]);
     }
+    
+  
 
-    // إضافة مستخدم جديد (للأدمن فقط)
+
+ // إضافة مستخدم جديد (للأدمن فقط)
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -126,12 +178,15 @@ class UserController extends Controller
             'password' => 'required|string|min:6',
             'role'     => 'required|in:user,admin'
         ]);
-
+ // الحصول على بيانات الأدمن الحالي
+        $admin = auth()->user();
+         // إنشاء المستخدم الجديد بنفس مهمة الأدمن
         $user = User::create([
             'name'     => $validated['name'],
             'email'    => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role'     => $validated['role'],
+            'role'     => $validated['role'],  
+             'mission' => $admin->mission, // تعيين نفس المهمة الخاصة بالأدمن
         ]);
 
         return response()->json([
@@ -140,6 +195,7 @@ class UserController extends Controller
         ], 201);
     }
 
+    
     // تحديث بيانات مستخدم (للأدمن فقط)
     public function update(Request $request, User $user)
     {
@@ -172,3 +228,6 @@ class UserController extends Controller
         ]);
     }
 }
+
+
+

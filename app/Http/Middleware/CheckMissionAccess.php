@@ -12,51 +12,6 @@ use App\Http\Controllers\TelemetryController;
 use App\Http\Controllers\PayloadController;
 
 use Illuminate\Support\Facades\Log;
-// class CheckMissionAccess
-// {
-//     public function handle(Request $request, Closure $next, string $requiredMission): Response
-//     {
-//         $user = Auth::user();
-
-//         // التحقق مما إذا كان المستخدم مسجل ولديه المهمة المطلوبة
-//         if (!$user || $user->mission !== $requiredMission) {
-//             return response()->json([
-//                 'message' => 'Unauthorized access',
-//                 'error' => 'You do not have permission to access this resource'
-//             ], 403);
-//         }
-
-//         return $next($request);
-// }
-// }
-
-
-
-
-
-
-
-// 
-//     public function handle(Request $request, Closure $next): mixed
-//     {
-//         $user = Auth::user();
-//         $currentMission = $request->route()->getName(); // جلب اسم الـ Route الحالية
-
-//         // تسجيل القيم للتحقق
-//         Log::info('User Mission:', ['mission' => $user->mission ?? 'NULL']);
-//         Log::info('Current Route:', ['route' => $currentMission ?? 'NULL']);
-
-//         // التأكد من وجود المستخدم ومقارنة اسم المهمة
-//         if (!$user || strtolower(trim($user->mission)) !== strtolower(trim($currentMission))) {
-//             return response()->json([
-//                 'message' => 'Unauthorized access',
-//                 'error' => 'You do not have permission to access this page'
-//             ], 403);
-//         }
-
-//         return $next($request);
-//     }
-//
 
 class CheckMissionAccess
 {
@@ -71,11 +26,23 @@ class CheckMissionAccess
                 'error' => 'You do not have permission to access this resource'
             ], 403);
         }
+  // استخراج المهام المسموحة للمستخدم (تحويلها إلى مصفوفة في حال كانت متعددة)
+        $userMissions = explode(',', $user->mission); // يدعم القيم المتعددة مثل "Control,Telemetry"
 
-        // ✅ أضيفي هذا السطر لضمان إرجاع Response في كل الحالات
+        // التحقق مما إذا كانت المهمة المطلوبة موجودة ضمن مهام المستخدم أو الأدمن
+        if (!in_array(trim($requiredMission), array_map('trim', $userMissions))) {
+            return response()->json([
+                'message' => 'Unauthorized access',
+                'error' => 'You do not have permission to access this resource'
+            ], 403);
+        }
+
+        // ✅  هذا السطر لضمان إرجاع  في كل الحالات
         return $next($request);
     }
 }
 
 
-   
+
+      
+  
