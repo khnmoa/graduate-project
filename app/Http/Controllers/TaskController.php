@@ -90,7 +90,16 @@ class TaskController extends Controller
             'message' => 'تم حذف المهمة بنجاح'
         ], 200);
     }
+ 
+
+    public function getTasksByDate(Request $request)
+    {
+        // من المفترض أن يحتوي هذا الكود على الاستعلام لاسترجاع المهام حسب التاريخ
+        return response()->json(['message' => 'تم استدعاء الميثود بنجاح']);
+    }
 }
+
+
 
 
 

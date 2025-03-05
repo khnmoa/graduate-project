@@ -47,50 +47,25 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
+
 // حماية كل API بناءً على المهمة المسجلة في قاعدة البيانات
-// Route::middleware(['auth:sanctum', 'mission.access:Progration'])->group(function () {
-// 
-
-
-Route::middleware(['auth:sanctum', CheckMissionAccess::class . ':Progration'])->group(function () {
-
+Route::middleware(['auth:sanctum', 'mission.access:Progration'])->group(function () {
     Route::get('/progration', [ProgrationController::class, 'index']);
 });
 
-Route::middleware(['auth:sanctum', CheckMissionAccess::class . ':Control'])->group(function () {
+
+
+Route::middleware(['auth:sanctum', 'mission.access:Control'])->group(function () {
     Route::get('/control', [ControlController::class, 'index']);
 });
 
-Route::middleware(['auth:sanctum', CheckMissionAccess::class . ':Telemetry'])->group(function () {
+Route::middleware(['auth:sanctum', 'mission.access:Telemetry'])->group(function () {
     Route::get('/telemetry', [TelemetryController::class, 'index']);
 });
 
-Route::middleware(['auth:sanctum', CheckMissionAccess::class . ':Payload'])->group(function () {
+Route::middleware(['auth:sanctum', 'mission.access:Payload'])->group(function () {
     Route::get('/payload', [PayloadController::class, 'index']);
 });
-
-
-
-
-
-// حماية كل API بناءً على المهمة المسجلة في قاعدة البيانات
-// Route::middleware(['auth:sanctum', 'mission.access:Progration'])->group(function () {
-//     Route::get('/progration', [ProgrationController::class, 'index']);
-// });
-
-
-
-// Route::middleware(['auth:sanctum', 'mission.access:Control'])->group(function () {
-//     Route::get('/control', [ControlController::class, 'index']);
-// });
-
-// Route::middleware(['auth:sanctum', 'mission.access:Telemetry'])->group(function () {
-//     Route::get('/telemetry', [TelemetryController::class, 'index']);
-// });
-
-// Route::middleware(['auth:sanctum', 'mission.access:Payload'])->group(function () {
-//     Route::get('/payload', [PayloadController::class, 'index']);
-// });
 
 
 
@@ -133,3 +108,5 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tasks/by-date', [TaskController::class, 'getTasksByDate']);
 });
+
+
