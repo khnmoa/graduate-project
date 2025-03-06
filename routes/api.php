@@ -31,7 +31,6 @@ Route::get('/test', function (Request $request) {
 });
 
 // تسجيل الدخول والتسجيل
-Route::post('register', [UserController::class, 'register']);
 
 Route::post('login', [UserController::class, 'login'])->name('login');
 
@@ -40,8 +39,10 @@ Route::post('login', [UserController::class, 'login'])->name('login');
 
 // حماية عمليات تسجيل الخروج وعرض الملف الشخصي
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('register', [UserController::class, 'register']);
     Route::post('logout', [UserController::class, 'logout']);
     Route::get('profile', [UserController::class, 'showProfile']);
+    Route::get('getUsers', [UserController::class, 'getUsers']);
 });
 
 
@@ -75,19 +76,19 @@ Route::middleware(['auth:sanctum', 'mission.access:Payload'])->group(function ()
 Route::middleware('auth:sanctum')->group(function () {
     //  حماية المسارات للأدمن فقط
     Route::middleware('auth:sanctum', AdminMiddleware::class)->group(function () {
-        Route::get('/users', [UserController::class, 'index']);  
-        Route::post('/users', [UserController::class, 'store']); 
+        Route::get('/users', [UserController::class, 'index']);
+        Route::post('/users', [UserController::class, 'store']);
         Route::put('/users/{user}', [UserController::class, 'update']);
         Route::delete('/users/{user}', [UserController::class, 'destroy']);
     });
-   
-    
+
+
     // يمكن لأي مستخدم البحث عن المستخدمين
     Route::get('/users/search', [UserController::class, 'search']);
 });
 
 
- 
+
 // // Route::apiResource('tasks', TaskController::class);
 // Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 //     Route::post('/tasks', [TaskController::class, 'store']); // الأدمن فقط يمكنه تعيين المهام
