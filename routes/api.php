@@ -11,7 +11,7 @@ use App\Http\Controllers\ControlController;
 use App\Http\Controllers\TelemetryController;
 use App\Http\Controllers\PayloadController;
 use App\Http\Controllers\TaskController;
-
+use App\Http\Controllers\PowerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,4 +110,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tasks/by-date', [TaskController::class, 'getTasksByDate']);
 });
 
+// Route::get('powers', [PowerController::class, 'index']);
+// Route::post('powers', [PowerController::class, 'store']);
+// Route::get('powers/{id}', [PowerController::class, 'show']);
+// Route::put('powers/{id}', [PowerController::class, 'update']);
+// Route::delete('powers/{id}', [PowerController::class, 'destroy']);
 
+
+Route::get('powers', [PowerController::class, 'index']);
+Route::post('powers', [PowerController::class, 'store']);
+Route::get('powers/{id}', [PowerController::class, 'show']);
+Route::put('powers/{id}', [PowerController::class, 'update']);
+Route::delete('powers/{id}', [PowerController::class, 'destroy']);
