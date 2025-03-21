@@ -16,7 +16,11 @@ class bcController extends Controller
     // Store new Obc data
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
+            'power_id' => 'required|exists:power,id',
+            'telemetry_id' => 'required|exists:telemetry,id',
+            'communications_id' => 'required|exists:communications,id',
+            'time' => 'required|date',
             'cpu_usage' => 'required|numeric',
             'memory_usage' => 'required|numeric',
             'cpu_temperature' => 'nullable|numeric',
@@ -27,8 +31,10 @@ class bcController extends Controller
             'operating_mode' => 'nullable|string',
         ]);
 
-        $Obc = Obc::create($validatedData);
-        return response()->json($Obc, 201);
+        $obc = Obc::create($request->all());
+
+        return response()->json($obc, 201);
+
     }
 
     // Get a single Obc record by ID

@@ -12,13 +12,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('commands', function (Blueprint $table) {
-            $table->integer('code')->primary(); // Unique Code
-            $table->string('name'); // Abbreviation of the command
-            $table->text('description'); // Full name of the command
-            $table->string('subsystem'); // Subsystem associated with the command
+            $table->integer('code')->primary(); // Primary key
+            $table->string('name');              // Abbreviation of the command
+            $table->text('description');         // Full description
+
+            // علاقة مع جدول Subsystems
+            $table->foreignId('subsystem_id')->nullable()->constrained('subsystems')->onDelete('cascade');
+
+            // علاقات مع الجداول الأخرى
+            $table->foreignId('communication_id')->nullable()->constrained('communications')->onDelete('cascade');
+            $table->foreignId('obc_id')->nullable()->constrained('obcs')->onDelete('cascade');
+            $table->foreignId('power_id')->nullable()->constrained('powers')->onDelete('cascade');
+            $table->foreignId('gps_id')->nullable()->constrained('gps')->onDelete('cascade');
+            $table->foreignId('control_id')->nullable()->constrained('controls')->onDelete('cascade');
+            $table->foreignId('payload_id')->nullable()->constrained('payloads')->onDelete('cascade');
+            $table->foreignId('thermal_id')->nullable()->constrained('thermals')->onDelete('cascade');
+            $table->foreignId('telemetry_id')->nullable()->constrained('telemetries')->onDelete('cascade');
+
             $table->timestamps();
         });
-
     }
 
     /**

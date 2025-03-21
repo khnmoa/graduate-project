@@ -2,118 +2,121 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Command;
+use App\Models\Subsystem;
 
 class CommandController extends Controller
 {
-    // /**
-    //  * Display a listing of the resource.
-    //  *     // Get all commands
-    //  */
-    // public function index()
-    // {
-    //     return response()->json(Command::all());
+    /**
+     * عرض جميع الأوامر مع العلاقات المرتبطة بها
+     */
+    public function index()
+    {
+        return response()->json(Command::with([
+            'communication', 'obc', 'power', 'gps',
+            'control', 'payload', 'thermal', 'telemetry'
+        ])->get());
+    }
 
-    // }
-
-
-
-     /**
-     *  Subsystem عرض كل الأوامر الخاصة بـ 
+    /**
+     * عرض الأوامر الخاصة بـ Subsystem معين
      */
     public function getCommandsBySubsystem($subsystem)
     {
-        // جلب الأوامر الخاصة فقط بالـ subsystem المحدد
-        $commands = Command::where('subsystem', $subsystem)->get();
+        $commands = Command::with([
+            'communication', 'obc', 'power', 'gps',
+            'control', 'payload', 'thermal', 'telemetry'
+        ])->where('subsystem_id', $subsystem)->get();  // تغيير 'subsystem' إلى 'subsystem_id'
 
-        // إرجاع البيانات كـ JSON
         return response()->json($commands);
     }
 
-
-
-
     /**
-     * Store a newly created resource in storage.
-     *      // Store a new command
+     * تخزين أمر جديد في قاعدة البيانات
      */
     public function store(Request $request)
     {
-         // التحقق من صحة البيانات المدخلة
-         $request->validate([
+        $validatedData = $request->validate([
             'code' => 'required|integer|unique:commands,code',
             'name' => 'required|string',
             'description' => 'required|string',
-            'subsystem' => 'required|string'
+            'subsystem' => 'required|string',
+            'communication_id' => 'nullable|exists:communications,id',
+            'obc_id' => 'nullable|exists:obcs,id',
+            'power_id' => 'nullable|exists:powers,id',
+            'gps_id' => 'nullable|exists:gps,id',
+            'control_id' => 'nullable|exists:controls,id',
+            'payload_id' => 'nullable|exists:payloads,id',
+            'thermal_id' => 'nullable|exists:thermals,id',
+            'telemetry_id' => 'nullable|exists:telemetries,id',
         ]);
 
-        // إنشاء الأمر في قاعدة البيانات
-        $command = Command::create([
-            'code' => $request->code,
-            'name' => $request->name,
-            'description' => $request->description,
-            'subsystem' => $request->subsystem
-        ]);
+        $command = Command::create($validatedData);
 
         return response()->json([
+            'status' => 'success',
             'message' => 'Command added successfully',
             'command' => $command
         ], 201);
-
     }
 
     /**
-     * Display the specified resource.
-     *        // Show a specific command
+     * عرض أمر معين بواسطة الـ ID
      */
-    // public function show(string $id)
-    // {
-    //     return response()->json(Command::findOrFail($id));
+    public function show(string $id)
+    {
+        $command = Command::with([
+            'communication', 'obc', 'power', 'gps',
+            'control', 'payload', 'thermal', 'telemetry'
+        ])->findOrFail($id);  // استخدام findOrFail لعدم الحاجة للتحقق يدويًا
 
-    // }
+        return response()->json($command);
+    }
 
     /**
-     * Update the specified resource in storage.
-     *     // Update a command
+     * تحديث أمر معين
      */
-    // public function update(Request $request, string $id)
-    // {
-    //     $command = Command::findOrFail($id);
-    //     $validated = $request->validate([
-    //         'code' => 'string|unique:commands,code,' . $id,
-    //         'name' => 'string',
-    //         'description' => 'string',
-    //         'time_type' => 'string',
-    //         'time' => 'nullable|date',
-    //     ]);
+    public function update(Request $request, $id)
+    {
+        $command = Command::findOrFail($id);  // استخدام findOrFail لعدم الحاجة للتحقق يدويًا
 
-    //     $command->update($validated);
-    //     return response()->json($command);
+        $validatedData = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'description' => 'nullable|string',
+            'subsystem' => 'sometimes|string',
+            'communication_id' => 'nullable|exists:communications,id',
+            'obc_id' => 'nullable|exists:obcs,id',
+            'power_id' => 'nullable|exists:powers,id',
+            'gps_id' => 'nullable|exists:gps,id',
+            'control_id' => 'nullable|exists:controls,id',
+            'payload_id' => 'nullable|exists:payloads,id',
+            'thermal_id' => 'nullable|exists:thermals,id',
+            'telemetry_id' => 'nullable|exists:telemetries,id',
+        ]);
 
-    // }
+        $command->update($validatedData);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Command updated successfully',
+            'command' => $command
+        ]);
+    }
 
     /**
-     * Remove the specified resource from storage.
-     * // Delete a command
+     * حذف أمر معين
      */
     public function destroy(string $id)
     {
-           // البحث عن الأمر
-           $command = Command::find($id);
+        $command = Command::findOrFail($id);  // استخدام findOrFail لعدم الحاجة للتحقق يدويًا
 
-           if (!$command) {
-               return response()->json(['message' => 'Command not found'], 404);
-           }
-   
-           // حذف الأمر
-           $command->delete();
-   
-           return response()->json(['message' => 'Command deleted successfully']);
-   }
-   
+        $command->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Command deleted successfully'
+        ]);
+    }
 }
-    
-
-
-
-

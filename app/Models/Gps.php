@@ -10,24 +10,21 @@ class Gps extends Model
 {
     use HasFactory;
 
-    // Specify the table name if it's not the plural form of the model
-    protected $table = 'gps';
+    protected $fillable = ['telemetry_id', 'time', 'latitude', 'longitude', 'altitude', 'velocity', 
+    'subsystem_name', ];
 
-    // Allow mass assignment for the specified fields
-    protected $fillable = [
-        'time',
-        'latitude',
-        'longitude',
-        'altitude',
-        'velocity'
-    ];
+    // تعريف العلاقة مع جدول telemetry
+    public function telemetrys()
+    {
+        return $this->belongsTo(Telemetrys::class);
+    }
+    public function Commands()
+    {
+        return $this->hasMany(Commands::class);
+    }
 
-    // Automatically cast attributes to their respective types
-    protected $casts = [
-        'time' => 'datetime',
-        'latitude' => 'float',
-        'longitude' => 'float',
-        'altitude' => 'float',
-        'velocity' => 'float',
-    ];
+    public function subsystem()
+    {
+        return $this->belongsTo(Subsystem::class, 'subsystem_name', 'name');
+    }
 }

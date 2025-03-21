@@ -27,6 +27,7 @@ class CommunicationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'telemetry_id' => 'required|exists:telemetry,id',
             'time' => 'required|date',
             'signal_strength' => 'required|string',
             'data_rate' => 'required|numeric',
@@ -34,9 +35,10 @@ class CommunicationController extends Controller
             'status' => 'required|in:Active,Interrupted,Failed',
         ]);
 
-        $communication = Communication::create($request->all());
+        $communication = Communications::create($request->all());
 
-        return response()->json($communication, 201);
+        return response()->json($communication,201);
+
     }
 
     // Update a record

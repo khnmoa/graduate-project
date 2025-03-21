@@ -12,6 +12,7 @@ class Telemetry extends Model
     protected $table = 'telemetry'; // اسم الجدول
 
     protected $fillable = [
+        'subsystem_name',
         'time',
         'sensor_telemetry',
         'sensor_gps',
@@ -24,4 +25,46 @@ class Telemetry extends Model
     ];
 
     public $timestamps = true; // لتفعيل timestamps (created_at & updated_at)
+
+    // العلاقات
+
+    public function gps()
+    {
+        return $this->hasMany(Gps::class);
+    }
+
+    public function obcs()
+    {
+        return $this->hasMany(Obc::class);
+    }
+
+    public function communications()
+    {
+        return $this->hasMany(Communication::class);
+    }
+
+    public function thermals()
+    {
+        return $this->hasMany(Thermal::class);
+    }
+
+    public function controls()
+    {
+        return $this->hasMany(Control::class);
+    }
+
+    public function powers()
+    {
+        return $this->hasMany(Power::class);
+    }
+
+    public function commands()
+    {
+        return $this->hasMany(Command::class);
+    }
+
+    public function Subsystem()
+    {
+        return $this->belongsTo(Subsystem::class, 'subsystem_name', 'name');
+    }
 }

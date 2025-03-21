@@ -12,6 +12,12 @@ use App\Http\Controllers\TelemetryController;
 use App\Http\Controllers\PayloadController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\PowerController;
+use App\Http\Controllers\SubsystemController;
+use App\Http\Controllers\CommandController;
+use App\Http\Controllers\UserCommandController;
+use App\Http\Controllers\SSPController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile', [UserController::class, 'showProfile']);
     Route::get('getUsers', [UserController::class, 'getUsers']);
 });
+
 
 
 
@@ -110,11 +117,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tasks/by-date', [TaskController::class, 'getTasksByDate']);
 });
 
-// Route::get('powers', [PowerController::class, 'index']);
-// Route::post('powers', [PowerController::class, 'store']);
-// Route::get('powers/{id}', [PowerController::class, 'show']);
-// Route::put('powers/{id}', [PowerController::class, 'update']);
-// Route::delete('powers/{id}', [PowerController::class, 'destroy']);
 
 
 Route::get('powers', [PowerController::class, 'index']);
@@ -122,3 +124,63 @@ Route::post('powers', [PowerController::class, 'store']);
 Route::get('powers/{id}', [PowerController::class, 'show']);
 Route::put('powers/{id}', [PowerController::class, 'update']);
 Route::delete('powers/{id}', [PowerController::class, 'destroy']);
+
+
+// subsystems
+Route::prefix('subsystems')->group(function () {
+    Route::get('/', [SubsystemController::class, 'index']); // جلب كل الـ subsystems
+    Route::post('/', [SubsystemController::class, 'store']); // إنشاء جديد
+    Route::get('/{id}', [SubsystemController::class, 'show']); // جلب واحد حسب الـ id
+    Route::put('/{id}', [SubsystemController::class, 'update']); // تحديث
+    Route::delete('/{id}', [SubsystemController::class, 'destroy']); // حذف
+
+
+});
+
+Route::get('/commands', [CommandController::class, 'index']);
+Route::get('/commands/subsystem/{subsystem}', [CommandController::class, 'getCommandsBySubsystem']);
+Route::get('/commands/{id}', [CommandController::class, 'show']);
+Route::post('/commands', [CommandController::class, 'store']);
+Route::put('/commands/{id}', [CommandController::class, 'update']);
+Route::delete('/commands/{id}', [CommandController::class, 'destroy']);
+
+
+
+Route::get('/subsystems', [SubsystemController::class, 'index']);
+Route::post('/subsystems', [SubsystemController::class, 'store']);
+Route::get('/subsystems/{id}', [SubsystemController::class, 'show']);
+Route::put('/subsystems/{id}', [SubsystemController::class, 'update']);
+Route::delete('/subsystems/{id}', [SubsystemController::class, 'destroy']);
+
+
+
+
+
+
+
+
+
+// Route::middleware('auth:api')->group(function () {
+//     // عرض جميع الأوامر التي سجلها المستخدم
+    Route::get('/user-commands', [UserCommandController::class, 'index']);
+
+    // إضافة أمر جديد اختاره المستخدم
+    Route::post('/user-commands', [UserCommandController::class, 'store']);
+
+    // حذف أمر معين من جدول user_commands
+    Route::delete('/user-commands/{id}', [UserCommandController::class, 'destroy']);
+
+    // جلب الأوامر الخاصة بمستخدم معين
+    Route::get('/user-commands/{user_id}', [UserCommandController::class, 'getUserCommands']);
+// });
+
+
+
+
+
+Route::post('/encode-packet', [SSPController::class, 'encodePacket']);
+Route::post('/decode-packet', [SSPController::class, 'decodePacket']);
+
+
+
+

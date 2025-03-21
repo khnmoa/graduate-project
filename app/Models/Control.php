@@ -12,6 +12,7 @@ class Control extends Model
     protected $table = 'control'; // اسم الجدول
 
     protected $fillable = [
+        'subsystem_name',
         'gyroscope_x', 'gyroscope_y', 'gyroscope_z',
         'magnetometer_x', 'magnetometer_y', 'magnetometer_z',
         'system_status', 'control_mode', 'time',
@@ -26,4 +27,19 @@ class Control extends Model
         'magnetometer_y' => 'float',
         'magnetometer_z' => 'float',
     ];
+
+    public function telemetrys()
+    {
+        return $this->belongsTo(Telemetrys::class);
+    }
+
+    public function Commands()
+    {
+        return $this->hasMany(Commands::class);
+    }
+
+    public function subsystem()
+    {
+        return $this->belongsTo(Subsystem::class, 'subsystem_name', 'name');
+    }
 }

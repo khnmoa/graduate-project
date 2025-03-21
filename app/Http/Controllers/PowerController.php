@@ -22,6 +22,7 @@ class PowerController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'telemetry_id' => 'required|exists:telemetry,id',
             'user_id' => 'required|exists:users,id',
             'users_name' => 'required|string',
             'Battery_voltage' => 'required|numeric',

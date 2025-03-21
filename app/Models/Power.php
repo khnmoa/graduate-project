@@ -9,10 +9,30 @@ class Power extends Model
 {
     use HasFactory;
   
-    protected $fillable = ['user_id', 'users_name', 'Battery_voltage', 'Battery_level', 'Time_at'];
+    protected $fillable = ['user_id', 'users_name', 'Battery_voltage', 'Battery_level', 'Time_at','subsystem_name'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+
+
+    public function obcs()
+    {
+        return $this->hasMany(Obcs::class);
+    }
+    public function telemetrys()
+    {
+        return $this->hasMany(Telemetrys::class);
+    }
+    public function Commands()
+    {
+        return $this->hasMany(Commands::class);
+    }
+
+    public function subsystem()
+    {
+        return $this->belongsTo(Subsystem::class, 'subsystem_name', 'name');
     }
 }
