@@ -12,10 +12,7 @@ class Telemetry extends Model
     protected $table = 'telemetry'; // اسم الجدول
 
     protected $fillable = [
-<<<<<<< HEAD
         'subsystem_name',
-=======
->>>>>>> b754548ab405806baa10a009a4e73d41ffba7ed5
         'time',
         'sensor_telemetry',
         'sensor_gps',
@@ -28,7 +25,6 @@ class Telemetry extends Model
     ];
 
     public $timestamps = true; // لتفعيل timestamps (created_at & updated_at)
-<<<<<<< HEAD
 
     // العلاقات
 
@@ -67,11 +63,8 @@ class Telemetry extends Model
         return $this->hasMany(Command::class);
     }
 
-    public function Subsystem()
+    public function subsystem()
     {
         return $this->belongsTo(Subsystem::class, 'subsystem_name', 'name');
     }
 }
-=======
-}
->>>>>>> b754548ab405806baa10a009a4e73d41ffba7ed5

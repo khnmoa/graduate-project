@@ -5,58 +5,54 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-<<<<<<< HEAD
 class Obc extends Model
-=======
-class OBC extends Model
->>>>>>> b754548ab405806baa10a009a4e73d41ffba7ed5
 {
     use HasFactory;
 
-    protected $table = 'obc'; // Define the table name
+    protected $table = 'obc'; // اسم الجدول
 
     protected $fillable = [
-<<<<<<< HEAD
-        'power_id', 'telemetry_id', 'communications_id', 
-        'time', 'cpu_usage', 'memory_usage', 'cpu_temperature',
-        'memory_temperature', 'uptime', 'error_logs',
-        'firmware_version', 'operating_mode', 'subsystem_name',
+        'power_id',
+        'telemetry_id',
+        'communications_id',
+        'time',
+        'cpu_usage',
+        'memory_usage',
+        'cpu_temperature',
+        'memory_temperature',
+        'uptime',
+        'error_logs',
+        'firmware_version',
+        'operating_mode',
+        'subsystem_name'
     ];
 
-    public $timestamps = true; // Laravel will handle created_at & updated_at
+    public $timestamps = true;
 
-    // العلاقة مع جدول power
-    public function powers()
+    // العلاقات
+
+    public function power()
     {
-        return $this->belongsTo(Powers::class);
+        return $this->belongsTo(Power::class);
     }
 
-    // العلاقة مع جدول telemetry
-    public function telemetrys()
+    public function telemetry()
     {
-        return $this->belongsTo(Telemetrys::class);
+        return $this->belongsTo(Telemetry::class);
     }
 
-    // العلاقة مع جدول communications
-    public function communications()
+    public function communication()
     {
-        return $this->belongsTo(Communications::class);
+        return $this->belongsTo(Communication::class);
     }
-    public function Commands()
+
+    public function commands()
     {
-        return $this->hasMany(Commands::class);
+        return $this->hasMany(Command::class);
     }
 
     public function subsystem()
     {
         return $this->belongsTo(Subsystem::class, 'subsystem_name', 'name');
     }
-=======
-        'time', 'cpu_usage', 'memory_usage', 'cpu_temperature',
-        'memory_temperature', 'uptime', 'error_logs',
-        'firmware_version', 'operating_mode'
-    ];
-
-    public $timestamps = true; // Laravel will handle created_at & updated_at
->>>>>>> b754548ab405806baa10a009a4e73d41ffba7ed5
 }

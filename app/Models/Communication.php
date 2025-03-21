@@ -12,37 +12,35 @@ class Communication extends Model
     protected $table = 'communications'; // Table name
 
     protected $fillable = [
-<<<<<<< HEAD
         'subsystem_name',
-=======
->>>>>>> b754548ab405806baa10a009a4e73d41ffba7ed5
         'time',
         'signal_strength',
         'data_rate',
         'latency',
         'status',
     ];
-<<<<<<< HEAD
 
+    // العلاقة مع جدول OBCs
     public function obcs()
     {
-        return $this->hasMany(Obcs::class);
+        return $this->hasMany(Obc::class);
     }
 
-    public function telemetrys()
+    // العلاقة مع جدول telemetry
+    public function telemetry()
     {
-        return $this->belongsTo(Telemetrys::class);
+        return $this->belongsTo(Telemetry::class);
     }
 
-    public function Commands()
+    // العلاقة مع جدول commands
+    public function commands()
     {
-        return $this->hasMany(Commands::class);
+        return $this->hasMany(Command::class);
     }
-    
+
+    // العلاقة مع جدول subsystem
     public function subsystem()
     {
         return $this->belongsTo(Subsystem::class, 'subsystem_name', 'name');
     }
-=======
->>>>>>> b754548ab405806baa10a009a4e73d41ffba7ed5
 }
