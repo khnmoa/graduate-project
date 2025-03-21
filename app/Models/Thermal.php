@@ -19,7 +19,10 @@ class Thermal extends Model
         'cooling_status',
         'radiator_status',
         'thermal_alert',
+<<<<<<< HEAD
         'subsystem_name',
+=======
+>>>>>>> b754548ab405806baa10a009a4e73d41ffba7ed5
     ];
 
     protected $casts = [
@@ -31,6 +34,7 @@ class Thermal extends Model
         'radiator_status' => 'boolean',
         'thermal_alert' => 'boolean',
     ];
+<<<<<<< HEAD
 
     public function Telemetrys()
     {
@@ -45,4 +49,6 @@ class Thermal extends Model
     {
         return $this->belongsTo(Subsystem::class, 'subsystem_name', 'name');
     }
+=======
+>>>>>>> b754548ab405806baa10a009a4e73d41ffba7ed5
 }

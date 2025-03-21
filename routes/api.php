@@ -118,12 +118,12 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
-
 Route::get('powers', [PowerController::class, 'index']);
 Route::post('powers', [PowerController::class, 'store']);
 Route::get('powers/{id}', [PowerController::class, 'show']);
 Route::put('powers/{id}', [PowerController::class, 'update']);
 Route::delete('powers/{id}', [PowerController::class, 'destroy']);
+
 
 
 // subsystems

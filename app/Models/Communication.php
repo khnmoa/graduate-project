@@ -12,13 +12,17 @@ class Communication extends Model
     protected $table = 'communications'; // Table name
 
     protected $fillable = [
+<<<<<<< HEAD
         'subsystem_name',
+=======
+>>>>>>> b754548ab405806baa10a009a4e73d41ffba7ed5
         'time',
         'signal_strength',
         'data_rate',
         'latency',
         'status',
     ];
+<<<<<<< HEAD
 
     public function obcs()
     {
@@ -39,4 +43,6 @@ class Communication extends Model
     {
         return $this->belongsTo(Subsystem::class, 'subsystem_name', 'name');
     }
+=======
+>>>>>>> b754548ab405806baa10a009a4e73d41ffba7ed5
 }

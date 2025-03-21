@@ -24,14 +24,14 @@ class GpsController extends Controller
     public function store(Request $request)
     {
         // Validate request data
-        $request->validate([
-            'telemetry_id' => 'required|exists:telemetry,id',
+        $validatedData = $request->validate([
+            // Uncomment if foreign key is required:
+            // 'telemetry_id' => 'required|exists:telemetries,id',
             'time' => 'required|date',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'altitude' => 'required|numeric',
             'velocity' => 'required|numeric',
-
         ]);
 
         // Create a new GPS record

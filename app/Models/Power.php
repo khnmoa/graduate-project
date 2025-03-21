@@ -9,12 +9,17 @@ class Power extends Model
 {
     use HasFactory;
   
+<<<<<<< HEAD
     protected $fillable = ['user_id', 'users_name', 'Battery_voltage', 'Battery_level', 'Time_at','subsystem_name'];
+=======
+    protected $fillable = ['user_id', 'users_name', 'Battery_voltage', 'Battery_level', 'Time_at'];
+>>>>>>> b754548ab405806baa10a009a4e73d41ffba7ed5
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+<<<<<<< HEAD
 
 
 
@@ -35,4 +40,6 @@ class Power extends Model
     {
         return $this->belongsTo(Subsystem::class, 'subsystem_name', 'name');
     }
+=======
+>>>>>>> b754548ab405806baa10a009a4e73d41ffba7ed5
 }

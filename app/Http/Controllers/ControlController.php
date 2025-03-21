@@ -21,7 +21,6 @@ class ControlController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'telemetry_id' => 'required|exists:telemetry,id',
             'gyroscope_x' => 'required|numeric',
             'gyroscope_y' => 'required|numeric',
             'gyroscope_z' => 'required|numeric',

@@ -21,7 +21,10 @@ class ThermalController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
+
             'telemetry_id' => 'required|exists:telemetry,id',
+
+
             'internal_temperature' => 'required|numeric',
             'external_temperature' => 'required|numeric',
             'battery_temperature' => 'required|numeric',

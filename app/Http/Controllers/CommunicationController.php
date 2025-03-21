@@ -26,8 +26,9 @@ class CommunicationController extends Controller
     // Store a new record
     public function store(Request $request)
     {
-        $request->validate([
-            'telemetry_id' => 'required|exists:telemetry,id',
+        $validatedData = $request->validate([
+            // Uncomment if using foreign key:
+            // 'telemetry_id' => 'required|exists:telemetries,id',
             'time' => 'required|date',
             'signal_strength' => 'required|string',
             'data_rate' => 'required|numeric',
@@ -35,10 +36,9 @@ class CommunicationController extends Controller
             'status' => 'required|in:Active,Interrupted,Failed',
         ]);
 
-        $communication = Communications::create($request->all());
+        $communication = Communication::create($validatedData);
 
-        return response()->json($communication,201);
-
+        return response()->json($communication, 201);
     }
 
     // Update a record
@@ -49,7 +49,7 @@ class CommunicationController extends Controller
             return response()->json(['message' => 'Record not found'], 404);
         }
 
-        $request->validate([
+        $validatedData = $request->validate([
             'time' => 'sometimes|date',
             'signal_strength' => 'sometimes|string',
             'data_rate' => 'sometimes|numeric',
@@ -57,7 +57,7 @@ class CommunicationController extends Controller
             'status' => 'sometimes|in:Active,Interrupted,Failed',
         ]);
 
-        $communication->update($request->all());
+        $communication->update($validatedData);
 
         return response()->json($communication, 200);
     }

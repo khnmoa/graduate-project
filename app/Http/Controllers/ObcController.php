@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Obc;
 
-class bcController extends Controller
+class BcController extends Controller
 {
     // Get all Obc records
     public function index()
@@ -16,11 +16,13 @@ class bcController extends Controller
     // Store new Obc data
     public function store(Request $request)
     {
-        $request->validate([
-            'power_id' => 'required|exists:power,id',
-            'telemetry_id' => 'required|exists:telemetry,id',
+        $validatedData = $request->validate([
+            // إذا كان مطلوبًا التأكد من علاقات خارجية Uncomment السطور التالية:
+            'power_id' => 'required|exists:powers,id',
+            'telemetry_id' => 'required|exists:telemetries,id',
             'communications_id' => 'required|exists:communications,id',
             'time' => 'required|date',
+
             'cpu_usage' => 'required|numeric',
             'memory_usage' => 'required|numeric',
             'cpu_temperature' => 'nullable|numeric',
@@ -31,27 +33,25 @@ class bcController extends Controller
             'operating_mode' => 'nullable|string',
         ]);
 
-        $obc = Obc::create($request->all());
-
-        return response()->json($obc, 201);
-
+        $obc = Obc::create($validatedData);
+        return response()->json($obc, 201);
     }
 
     // Get a single Obc record by ID
     public function show($id)
     {
-        $Obc = Obc::find($id);
-        if (!$Obc) {
+        $obc = Obc::find($id);
+        if (!$obc) {
             return response()->json(['message' => 'Record not found'], 404);
         }
-        return response()->json($Obc, 200);
+        return response()->json($obc, 200);
     }
 
     // Update an Obc record
     public function update(Request $request, $id)
     {
-        $Obc = Obc::find($id);
-        if (!$Obc) {
+        $obc = Obc::find($id);
+        if (!$obc) {
             return response()->json(['message' => 'Record not found'], 404);
         }
 
@@ -66,19 +66,19 @@ class bcController extends Controller
             'operating_mode' => 'nullable|string',
         ]);
 
-        $Obc->update($validatedData);
-        return response()->json($Obc, 200);
+        $obc->update($validatedData);
+        return response()->json($obc, 200);
     }
 
     // Delete an Obc record
     public function destroy($id)
     {
-        $Obc = Obc::find($id);
-        if (!$Obc) {
+        $obc = Obc::find($id);
+        if (!$obc) {
             return response()->json(['message' => 'Record not found'], 404);
         }
 
-        $Obc->delete();
+        $obc->delete();
         return response()->json(['message' => 'Record deleted'], 200);
     }
 }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Command;
-use App\Models\Subsystem;
 
 class CommandController extends Controller
 {
@@ -23,12 +22,12 @@ class CommandController extends Controller
     /**
      * عرض الأوامر الخاصة بـ Subsystem معين
      */
-    public function getCommandsBySubsystem($subsystem)
+    public function getCommandsBySubsystem($subsystemId)
     {
         $commands = Command::with([
             'communication', 'obc', 'power', 'gps',
             'control', 'payload', 'thermal', 'telemetry'
-        ])->where('subsystem_id', $subsystem)->get();  // تغيير 'subsystem' إلى 'subsystem_id'
+        ])->where('subsystem_id', $subsystemId)->get();
 
         return response()->json($commands);
     }
@@ -42,7 +41,7 @@ class CommandController extends Controller
             'code' => 'required|integer|unique:commands,code',
             'name' => 'required|string',
             'description' => 'required|string',
-            'subsystem' => 'required|string',
+            'subsystem_id' => 'required|exists:subsystems,id', // تعديل هنا لاستخدام subsystem_id
             'communication_id' => 'nullable|exists:communications,id',
             'obc_id' => 'nullable|exists:obcs,id',
             'power_id' => 'nullable|exists:powers,id',
@@ -65,12 +64,12 @@ class CommandController extends Controller
     /**
      * عرض أمر معين بواسطة الـ ID
      */
-    public function show(string $id)
+    public function show($id)
     {
         $command = Command::with([
             'communication', 'obc', 'power', 'gps',
             'control', 'payload', 'thermal', 'telemetry'
-        ])->findOrFail($id);  // استخدام findOrFail لعدم الحاجة للتحقق يدويًا
+        ])->findOrFail($id);
 
         return response()->json($command);
     }
@@ -80,12 +79,13 @@ class CommandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $command = Command::findOrFail($id);  // استخدام findOrFail لعدم الحاجة للتحقق يدويًا
+        $command = Command::findOrFail($id);
 
         $validatedData = $request->validate([
+            'code' => 'sometimes|integer|unique:commands,code,' . $id,
             'name' => 'sometimes|string|max:255',
-            'description' => 'nullable|string',
-            'subsystem' => 'sometimes|string',
+            'description' => 'sometimes|string',
+            'subsystem_id' => 'sometimes|exists:subsystems,id',
             'communication_id' => 'nullable|exists:communications,id',
             'obc_id' => 'nullable|exists:obcs,id',
             'power_id' => 'nullable|exists:powers,id',
@@ -108,10 +108,9 @@ class CommandController extends Controller
     /**
      * حذف أمر معين
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $command = Command::findOrFail($id);  // استخدام findOrFail لعدم الحاجة للتحقق يدويًا
-
+        $command = Command::findOrFail($id);
         $command->delete();
 
         return response()->json([

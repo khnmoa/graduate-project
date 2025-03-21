@@ -29,4 +29,8 @@ class UserCommand extends Model
     {
         return $this->belongsTo(Command::class, 'command_code', 'code');
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> b754548ab405806baa10a009a4e73d41ffba7ed5
