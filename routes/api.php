@@ -16,7 +16,7 @@ use App\Http\Controllers\SubsystemController;
 use App\Http\Controllers\CommandController;
 use App\Http\Controllers\UserCommandController;
 use App\Http\Controllers\SSPController;
-
+use App\Http\Controllers\NasaApiController;
 
 
 /*
@@ -184,3 +184,6 @@ Route::post('/decode-packet', [SSPController::class, 'decodePacket']);
 
 
 
+
+
+Route::get('/asteroids', [NasaApiController::class, 'getAsteroids']);
