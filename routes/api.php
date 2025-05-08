@@ -18,7 +18,8 @@ use App\Http\Controllers\UserCommandController;
 use App\Http\Controllers\SSPController;
 use App\Http\Controllers\NasaApiController;
 
-
+use App\Http\Controllers\AsteroidController;
+;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -49,7 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [UserController::class, 'logout']);
     Route::get('profile', [UserController::class, 'showProfile']);
     Route::get('getUsers', [UserController::class, 'getUsers']);
-});
+ });
 
 
 
@@ -184,6 +185,87 @@ Route::post('/decode-packet', [SSPController::class, 'decodePacket']);
 
 
 
-
+Route::get('/fetch-asteroids', [AsteroidController::class, 'fetchAsteroids']);
 
 Route::get('/asteroids', [NasaApiController::class, 'getAsteroids']);
+
+
+
+
+
+Route::get('/OBC_GPS', function () {
+    // قراءة محتوى الملف
+    $filePath = storage_path('app/data/OBC_GPS.ipynb');
+
+    // التحقق من وجود الملف
+    if (!file_exists($filePath)) {
+        return response()->json(['error' => 'File not found'], 404);
+    }
+
+    // قراءة محتوى الملف
+    $content = file_get_contents($filePath);
+
+    // تحويل المحتوى إلى JSON
+    $data = json_decode($content, true);
+
+    return response()->json(['data' => $data]);
+});
+
+
+Route::get('/control', function () {
+    // قراءة محتوى الملف
+    $filePath = storage_path('app/data/control.ipynb');
+
+    // التحقق من وجود الملف
+    if (!file_exists($filePath)) {
+        return response()->json(['error' => 'File not found'], 404);
+    }
+
+    // قراءة محتوى الملف
+    $content = file_get_contents($filePath);
+
+    // تحويل المحتوى إلى JSON
+    $data = json_decode($content, true);
+
+    return response()->json(['data' => $data]);
+});
+
+
+Route::get('/payload', function () {
+    // قراءة محتوى الملف
+    $filePath = storage_path('app/data/payload.ipynb');
+
+    // التحقق من وجود الملف
+    if (!file_exists($filePath)) {
+        return response()->json(['error' => 'File not found'], 404);
+    }
+
+    // قراءة محتوى الملف
+    $content = file_get_contents($filePath);
+
+    // تحويل المحتوى إلى JSON
+    $data = json_decode($content, true);
+
+    return response()->json(['data' => $data]);
+});
+
+
+
+Route::get('/power', function () {
+    // قراءة محتوى الملف
+    $filePath = storage_path('app/data/power.ipynb');
+
+    // التحقق من وجود الملف
+    if (!file_exists($filePath)) {
+        return response()->json(['error' => 'File not found'], 404);
+    }
+
+    // قراءة محتوى الملف
+    $content = file_get_contents($filePath);
+
+    // تحويل المحتوى إلى JSON
+    $data = json_decode($content, true);
+
+    return response()->json(['data' => $data]);
+});
+

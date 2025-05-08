@@ -28,9 +28,21 @@ class UserController extends Controller
             : null;
         $data['image'] = $imagePath;
         $admin = auth()->user();
-        if ($admin->role !== 'admin') {
+
+
+
+
+
+
+        if (!$admin || $admin->role !== 'admin') {
             return response()->json(['message' => 'غير مصرح لك'], 403);
         }
+
+
+
+        // if ($admin->role !== 'admin') {
+        //     return response()->json(['message' => 'غير مصرح لك'], 403);
+        // }
         $data['mission'] = $admin->mission;
         $data['password'] = Hash::make($data['password']);
         $user = User::create($data);

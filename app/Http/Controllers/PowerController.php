@@ -23,15 +23,15 @@ class PowerController extends Controller
     {
         $validated = $request->validate([
 
-            'telemetry_id' => 'required|exists:telemetry,id',
-
+            // 'telemetry_id' =>     'required|exists:telemetry,id',
+            'telemetry_id' =>  'nullable|integer',
             'user_id' => 'required|exists:users,id',
             'users_name' => 'required|string',
             'Battery_voltage' => 'required|numeric',
             'Battery_level' => 'required|numeric',
             'Time_at' => 'required|date',
         ]);
-
+        $validated['user_id'] = $validated['user_id'] ?? 1;
         $power = Power::create($validated);
 
         // Log the creation
@@ -43,6 +43,7 @@ class PowerController extends Controller
             'power' => $power
         ], 201);
     }
+
 
     /**
      * Display the specified resource.
