@@ -13,10 +13,12 @@ class CommandController extends Controller
      */
     public function index()
     {
-        return response()->json(Command::with([
+        $commands = Command::with([
             'communication', 'obc', 'power', 'gps',
             'control', 'payload', 'thermal', 'telemetry'
-        ])->get());
+        ])->get();
+
+        return response()->json($commands);
     }
 
     /**
@@ -39,19 +41,13 @@ class CommandController extends Controller
     {
         $validatedData = $request->validate([
             'code' => 'required|integer|unique:commands,code',
-            'name' => 'required|string',
+            'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'subsystem_id' => 'required|exists:subsystems,id', // تعديل هنا لاستخدام subsystem_id
-            'communication_id' => 'nullable|exists:communications,id',
-            'obc_id' => 'nullable|exists:obcs,id',
-            'power_id' => 'nullable|exists:powers,id',
-            'gps_id' => 'nullable|exists:gps,id',
-            'control_id' => 'nullable|exists:controls,id',
-            'payload_id' => 'nullable|exists:payloads,id',
-            'thermal_id' => 'nullable|exists:thermals,id',
-            'telemetry_id' => 'nullable|exists:telemetries,id',
+            'subsystem' => 'required|exists:subsystems,id', // تعديل الاسم ليصبح subsystem بدلاً من subsystem_name
+            'time' => 'nullable|date' // إضافة التحقق من الوقت
         ]);
 
+        // تخزين الأمر الجديد في قاعدة البيانات
         $command = Command::create($validatedData);
 
         return response()->json([
@@ -85,15 +81,8 @@ class CommandController extends Controller
             'code' => 'sometimes|integer|unique:commands,code,' . $id,
             'name' => 'sometimes|string|max:255',
             'description' => 'sometimes|string',
-            'subsystem_id' => 'sometimes|exists:subsystems,id',
-            'communication_id' => 'nullable|exists:communications,id',
-            'obc_id' => 'nullable|exists:obcs,id',
-            'power_id' => 'nullable|exists:powers,id',
-            'gps_id' => 'nullable|exists:gps,id',
-            'control_id' => 'nullable|exists:controls,id',
-            'payload_id' => 'nullable|exists:payloads,id',
-            'thermal_id' => 'nullable|exists:thermals,id',
-            'telemetry_id' => 'nullable|exists:telemetries,id',
+            'subsystem' => 'sometimes|exists:subsystems,id',
+            'time' => 'sometimes|date' // إضافة إمكانية تحديث الوقت
         ]);
 
         $command->update($validatedData);

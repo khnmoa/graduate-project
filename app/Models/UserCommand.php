@@ -15,7 +15,10 @@ class UserCommand extends Model
         'command_name',
         'command_description',
         'time_type',
-        'time'
+        'time' ,
+        'session_name',    // إضافة session_name
+        'start_date',      // إضافة start_date
+        'end_date'         // إضافة end_date
     ];
 
     // ربط المستخدم

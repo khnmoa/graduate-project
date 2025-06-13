@@ -17,16 +17,10 @@ use App\Http\Controllers\CommandController;
 use App\Http\Controllers\UserCommandController;
 use App\Http\Controllers\SSPController;
 use App\Http\Controllers\NasaApiController;
+use App\Http\Controllers\AsteroidController;
+use App\Http\Controllers\SolarRadiationController;
 
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-*/
-
-
-
+//  API Routes
 
 // اختبار الاتصال
 Route::get('/test', function (Request $request) {
@@ -49,10 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [UserController::class, 'logout']);
     Route::get('profile', [UserController::class, 'showProfile']);
     Route::get('getUsers', [UserController::class, 'getUsers']);
-});
-
-
-
+ });
 
 
 
@@ -60,8 +51,6 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware(['auth:sanctum', 'mission.access:Progration'])->group(function () {
     Route::get('/progration', [ProgrationController::class, 'index']);
 });
-
-
 
 Route::middleware(['auth:sanctum', 'mission.access:Control'])->group(function () {
     Route::get('/control', [ControlController::class, 'index']);
@@ -71,13 +60,16 @@ Route::middleware(['auth:sanctum', 'mission.access:Telemetry'])->group(function 
     Route::get('/telemetry', [TelemetryController::class, 'index']);
 });
 
+
 Route::middleware(['auth:sanctum', 'mission.access:Payload'])->group(function () {
     Route::get('/payload', [PayloadController::class, 'index']);
+    Route::get('/payload/{id}', [PayloadController::class, 'show']);
+    Route::post('/payload', [PayloadController::class, 'store']);
+    Route::put('/payload/{id}', [PayloadController::class, 'update']);
+    Route::delete('/payload/{id}', [PayloadController::class, 'destroy']);
 });
 
 
-
-// Route::get('/test-progration', [ProgrationController::class, 'index']);
 
 // حماية المسارات بمصادقة Sanctum
 Route::middleware('auth:sanctum')->group(function () {
@@ -95,14 +87,6 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
-
-// // Route::apiResource('tasks', TaskController::class);
-// Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-//     Route::post('/tasks', [TaskController::class, 'store']); // الأدمن فقط يمكنه تعيين المهام
-//     Route::put('/tasks/{user}', [TaskController::class, 'update']);
-//     Route::delete('/tasks/{user}', [TaskController::class, 'destroy']);
-// });
-
 // حماية مهام الأدمن فقط
 Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     Route::post('/tasks', [TaskController::class, 'store']); // الأدمن فقط يمكنه تعيين المهام
@@ -110,13 +94,22 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy']);
 });
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/tasks', [TaskController::class, 'index']);      //  عرض قائمة المهام (فلترة، بحث)
+
+
+    Route::get('/tasks/{task}', [TaskController::class, 'show']); //  عرض مهمة واحدة
+});
+
+
+
+
 
 // 🔹 حماية البحث عن المهام بالتاريخ
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tasks/by-date', [TaskController::class, 'getTasksByDate']);
 });
-
 
 Route::get('powers', [PowerController::class, 'index']);
 Route::post('powers', [PowerController::class, 'store']);
@@ -156,10 +149,6 @@ Route::delete('/subsystems/{id}', [SubsystemController::class, 'destroy']);
 
 
 
-
-
-
-
 // Route::middleware('auth:api')->group(function () {
 //     // عرض جميع الأوامر التي سجلها المستخدم
     Route::get('/user-commands', [UserCommandController::class, 'index']);
@@ -183,7 +172,8 @@ Route::post('/decode-packet', [SSPController::class, 'decodePacket']);
 
 
 
-
-
+Route::get('/fetch-asteroids', [AsteroidController::class, 'fetchAsteroids']);
 
 Route::get('/asteroids', [NasaApiController::class, 'getAsteroids']);
+
+Route::get('/solar-radiation', [SolarRadiationController::class, 'egyptRadiation']);

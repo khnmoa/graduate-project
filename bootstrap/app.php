@@ -3,6 +3,10 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Console\Scheduling\Schedule;
+use App\Console\Commands\UpdateGpsData;
+use App\Console\Commands\UpdateControlData;
+use App\console\Commands\InsertObcData;
 
 $app = Application::configure(basePath: dirname(__DIR__)) // حفظ التطبيق في متغير
     ->withRouting(
@@ -18,14 +22,22 @@ $app = Application::configure(basePath: dirname(__DIR__)) // حفظ التطبي
 
         $middleware->alias([
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
-            'admin' => \App\Http\Middleware\AdminMiddleware::class, // تم التصحيح هنا
-       'mission.access' => \App\Http\Middleware\CheckMissionAccess::class, // ✅ أضيفي ميدل وير المهمة هنا 
-     ]);
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'mission.access' => \App\Http\Middleware\CheckMissionAccess::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
 
+    // هنا أضفنا الجدولة
+    ->withSchedule(function (Schedule $schedule) {
+        $schedule->command(UpdateGpsData::class)->everyMinute();
+        $schedule->command(UpdateControlData::class)->everyMinute();
+        $schedule->command(InsertObcData::class)->everyMinute();
+        
+    })
 
+    ->create();
 
 return $app;

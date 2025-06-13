@@ -7,10 +7,6 @@ use App\Models\UserCommand;
 use App\Models\Command;
 use App\Models\User;
 
-use App\Models\Subsystem;
-
-
-
 class UserCommandController extends Controller
 {
     // إرجاع جميع الأوامر التي سجلها المستخدم
@@ -27,7 +23,10 @@ class UserCommandController extends Controller
             'user_id' => 'required|exists:users,id',
             'command_code' => 'required|exists:commands,code',
             'time_type' => 'required|in:time tag,real time',
-            'time' => 'required|date'
+            'time' => 'required|date',
+            'session_name' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date'
         ]);
 
         // جلب بيانات الأمر من جدول commands
@@ -40,7 +39,10 @@ class UserCommandController extends Controller
             'command_name' => $command->name,
             'command_description' => $command->description,
             'time_type' => $request->time_type,
-            'time' => $request->time
+            'time' => $request->time,
+            'session_name' => $request->session_name,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date
         ]);
 
         return response()->json([

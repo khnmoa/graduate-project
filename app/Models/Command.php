@@ -18,22 +18,10 @@ class Command extends Model
         'name',
         'description',
         'subsystem_name',
-        'communication_id',
-        'obc_id',
-        'power_id',
-        'gps_id',
-        'control_id',
-        'payload_id',
-        'thermal_id',
-        'telemetry_id'
+
     ];
 
-    // Scope لفلترة حسب Subsystem
-    public function scopeOfSubsystem($query, $subsystemId)
-    {
-        return $query->where('subsystem_id', $subsystemId);
-    }
-
+    
     // العلاقات مع الجداول الأخرى
     public function subsystem()
     {

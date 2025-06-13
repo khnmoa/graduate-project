@@ -9,7 +9,7 @@ class Telemetry extends Model
 {
     use HasFactory;
 
-    protected $table = 'telemetry'; // اسم الجدول
+    protected $table = 'telemetries'; // اسم الجدول
 
     protected $fillable = [
         'subsystem_name',

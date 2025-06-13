@@ -9,7 +9,7 @@ class Obc extends Model
 {
     use HasFactory;
 
-    protected $table = 'obc'; // اسم الجدول
+    protected $table = 'obcs'; // اسم الجدول
 
     protected $fillable = [
         'power_id',

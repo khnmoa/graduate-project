@@ -28,7 +28,7 @@ class Power extends Model
         return $this->hasMany(Obcs::class);
     }
 
-    public function telemetrys()
+    public function telemetries()
     {
         return $this->hasMany(Telemetrys::class);
     }
